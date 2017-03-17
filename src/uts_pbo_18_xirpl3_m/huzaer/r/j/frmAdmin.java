@@ -5,8 +5,17 @@
  */
 package uts_pbo_18_xirpl3_m.huzaer.r.j;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.MessageFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -52,14 +61,14 @@ public class frmAdmin extends javax.swing.JFrame {
         wktBerangkat = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblData = new javax.swing.JTable();
         btnRefresh = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         bnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
-        btnExit = new javax.swing.JButton();
+        btnPrint = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -160,7 +169,7 @@ public class frmAdmin extends javax.swing.JFrame {
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -179,9 +188,9 @@ public class frmAdmin extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(10);
+        jScrollPane1.setViewportView(tblData);
+        if (tblData.getColumnModel().getColumnCount() > 0) {
+            tblData.getColumnModel().getColumn(0).setPreferredWidth(10);
         }
 
         jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 760, 490));
@@ -189,6 +198,11 @@ public class frmAdmin extends javax.swing.JFrame {
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 0, 760, 490));
 
         btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 100, 50));
 
         btnSave.setText("Save");
@@ -203,9 +217,19 @@ public class frmAdmin extends javax.swing.JFrame {
         getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, 90, 40));
 
         bnEdit.setText("Edit");
+        bnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bnEditActionPerformed(evt);
+            }
+        });
         getContentPane().add(bnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 380, 100, 50));
 
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 440, 100, 50));
 
         btnClear.setText("Clear");
@@ -216,13 +240,13 @@ public class frmAdmin extends javax.swing.JFrame {
         });
         getContentPane().add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 380, 100, 50));
 
-        btnExit.setText("Exit");
-        btnExit.addActionListener(new java.awt.event.ActionListener() {
+        btnPrint.setText("Print");
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExitActionPerformed(evt);
+                btnPrintActionPerformed(evt);
             }
         });
-        getContentPane().add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 440, 100, 50));
+        getContentPane().add(btnPrint, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 440, 100, 50));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -251,10 +275,16 @@ public class frmAdmin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txIDActionPerformed
 
-    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
         // TODO add your handling code here:
-        this.dispose();
-    }//GEN-LAST:event_btnExitActionPerformed
+        MessageFormat header = new MessageFormat("Biodata Siswa SMK Telkom Malang");
+        MessageFormat footer = new MessageFormat("Page {0,number,integer}       ");
+        try{
+            tblData.print(JTable.PrintMode.FIT_WIDTH, header, footer, true, null, true, null);
+        }catch(java.awt.print.PrinterException e){
+            System.err.format("Cannot print %s%n", e.getMessage());
+        }
+    }//GEN-LAST:event_btnPrintActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
@@ -319,6 +349,81 @@ public class frmAdmin extends javax.swing.JFrame {
             }
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void bnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnEditActionPerformed
+        // TODO add your handling code here:
+        SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy.MM.dd");
+        String tanggal = dataFormat.format(tglBerangkat.getDate());
+        
+        if("".equals(txID.getText()) || "".equals(txHarga.getText()) || "".equals(txNama.getText()) || "".equals(txStAwal.getText()) || "".equals(txStTjn.getText()) || tglBerangkat.equals("")){
+            JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "Error", JOptionPane.WARNING_MESSAGE);
+        }else{
+            
+            String jns = "";
+                if(jnsKrt.getSelectedItem().equals("Ekonomi")){
+                    jns = "Ekonomi";
+                }else if(jnsKrt.getSelectedItem().equals("Ekonomi AC")){
+                    jns = "Ekonomi AC";
+                }else if(jnsKrt.getSelectedItem().equals("Bisnis")){
+                    jns = "Bisnis";
+                }else if(jnsKrt.getSelectedItem().equals("Eksekutif")){
+                    jns = "Eksekutif";
+                }
+                String wkt = "";
+                if(wktBerangkat.getSelectedItem().equals("Pagi")){
+                    wkt = "Pagi";
+                }else if(wktBerangkat.getSelectedItem().equals("Siang")){
+                    wkt = "Siang";
+                }else if(wktBerangkat.getSelectedItem().equals("Malam")){
+                    wkt = "Malam";
+                }
+                String ddk = "";
+                if(tmpDuduk.getSelectedItem().equals("Gerbong 1")){
+                    ddk = "Gerbong 1";
+                }else if(tmpDuduk.getSelectedItem().equals("Gerbong 2")){
+                    ddk = "Gerbong 2";
+                }else if(tmpDuduk.getSelectedItem().equals("Gerbong 3")){
+                    ddk = "Gerbong 3";
+                }else if(tmpDuduk.getSelectedItem().equals("Gerbong 4")){
+                    ddk = "Gerbong 4";
+                }else if(tmpDuduk.getSelectedItem().equals("Gerbong 5")){
+                    ddk = "Gerbong 5";
+                }else if(tmpDuduk.getSelectedItem().equals("Gerbong 6")){
+                    ddk = "Gerbong 6";
+                }
+                
+            String SQL = "UPDATE `tb_pemesanan` SET `nama`='"+txNama.getText()+"',`stationawal`='"+txStAwal.getText()+"',`stationtujuan`='"+txStTjn.getText()+"',`tglberangkat`='"+tanggal+"',`jeniskrt`='"+jns+"',`wktberangkat`='"+wkt+"',`tmpduduk`='"+ddk+"',`harga`='"+txHarga.getText()+"' WHERE `id`='"+txID.getText()+"'";
+            int status = KoneksiDB.execute(SQL);
+                if(status == 1){
+                    JOptionPane.showMessageDialog(this, "Data berhasil diedit", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+                    selectData();
+                }else{
+                    JOptionPane.showMessageDialog(this, "Data gagal diedit", "Gagal", JOptionPane.WARNING_MESSAGE);
+                }   
+        }
+    }//GEN-LAST:event_bnEditActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        selectData();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        int baris = tblData.getSelectedRow();
+        if(baris != -1){
+            String id = tblData.getValueAt(baris, 0).toString();
+            String SQL = "DELETE FROM `tb_pemesanan` WHERE id = '"+id+"'";
+            int status = KoneksiDB.execute(SQL);;
+            if(status == 1){
+                JOptionPane.showMessageDialog(this, "Data berhasil dihapus", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(this, "Data gagal dihapus", "Gagal", JOptionPane.WARNING_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Pilih Baris Data Terlebih Dahulu", "Error", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -358,7 +463,7 @@ public class frmAdmin extends javax.swing.JFrame {
     private javax.swing.JButton bnEdit;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton jButton5;
@@ -375,8 +480,8 @@ public class frmAdmin extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JComboBox<String> jnsKrt;
+    private javax.swing.JTable tblData;
     private com.toedter.calendar.JDateChooser tglBerangkat;
     private javax.swing.JComboBox<String> tmpDuduk;
     private javax.swing.JTextField txHarga;
@@ -388,6 +493,108 @@ public class frmAdmin extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void selectData() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy.MM.dd");
+        //String tanggal = dataFormat.format(tglBerangkat.getDate());
+        String kolom[] = {"id","nama","stationawal","stationtujuan","tglberangkat","jeniskrt","wktberangkat","tmpduduk","harga"};
+        DefaultTableModel dtm = new DefaultTableModel(null, kolom);
+        String SQL = "SELECT * FROM tb_pemesanan";
+        ResultSet rs = KoneksiDB.executeQuery(SQL);;
+        try{
+            while(rs.next()){
+                String id = rs.getString(1);
+                String nama = rs.getString(2);
+                String stationawal = rs.getString(3);
+                String stationtujuan = rs.getString(4);
+                String tglberangkat = rs.getString(5);
+                String jeniskrt = "";
+                if(rs.getString(6).equals("Ekonomi")){
+                    jeniskrt = "Ekonomi";
+                }else if(rs.getString(6).equals("Ekonomi AC")){
+                    jeniskrt = "Ekonomi AC";
+                }else if(rs.getString(6).equals("Bisnis")){
+                    jeniskrt = "Bisnis";
+                }else if(rs.getString(6).equals("Eksekutif")){
+                    jeniskrt = "Eksekutif";
+                }
+                String wktberangkat = "";
+                if(rs.getString(7).equals("Pagi")){
+                    wktberangkat = "Pagi";
+                }else if(rs.getString(7).equals("Siang")){
+                    wktberangkat = "Siang";
+                }else if(rs.getString(7).equals("Malam")){
+                    wktberangkat = "Malam";
+                }
+                String tmpduduk = "";
+                if(rs.getString(8).equals("Gerbong 1")){
+                    tmpduduk = "Gerbong 1";
+                }else if(rs.getString(8).equals("Gerbong 2")){
+                    tmpduduk = "Gerbong 2";
+                }else if(rs.getString(8).equals("Gerbong 3")){
+                    tmpduduk = "Gerbong 3";
+                }else if(rs.getString(8).equals("Gerbong 4")){
+                    tmpduduk = "Gerbong 4";
+                }else if(rs.getString(8).equals("Gerbong 5")){
+                    tmpduduk = "Gerbong 5";
+                }else if(rs.getString(8).equals("Gerbong 6")){
+                    tmpduduk = "Gerbong 6";
+                }
+                String harga = rs.getString(9);
+                String data[] = {id,nama,stationawal,stationtujuan,tglberangkat,jeniskrt,wktberangkat,tmpduduk,harga};
+                dtm.addRow(data);
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(frmMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        tblData.setModel(dtm);
+    }
+    private void tblDataMouseClicked(java.awt.event.MouseEvent evt){
+        int baris = tblData.getSelectedRow();
+        if(baris != -1){
+            txID.setText(tblData.getValueAt(baris, 0).toString());
+            txNama.setText(tblData.getValueAt(baris, 1).toString());
+            txStAwal.setText(tblData.getValueAt(baris, 2).toString());
+            txStTjn.setText(tblData.getValueAt(baris, 3).toString());
+            SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+            Date dateFormat = null;
+            try{
+                dateFormat = date.parse(tblData.getValueAt(baris, 4).toString());
+            }catch(ParseException ex){
+                Logger.getLogger(frmMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            tglBerangkat.setDate(dateFormat);
+            String jns = tblData.getValueAt(baris, 5).toString();
+                if(jns.equals("Ekonomi")){
+                    jnsKrt.setSelectedItem("Ekonomi");
+                }else if(jns.equals("Ekonomi AC")){
+                    jnsKrt.setSelectedItem("Ekonomi AC");
+                }else if(jns.equals("Bisnis")){
+                    jnsKrt.setSelectedItem("Bisnis");
+                }else if(jns.equals("Eksekutif")){
+                    jnsKrt.setSelectedItem("Eksekutif");
+                }
+                String wkt = tblData.getValueAt(baris, 6).toString();;
+                if(wkt.equals("Pagi")){
+                    wktBerangkat.setSelectedIndex(1);
+                }else if(wkt.equals("Siang")){
+                    wktBerangkat.setSelectedIndex(2);
+                }else if(wkt.equals("Malam")){
+                    wktBerangkat.setSelectedIndex(3);
+                }
+                String ddk = tblData.getValueAt(baris, 7).toString();;
+                if(ddk.equals("Gerbong 1")){
+                    tmpDuduk.setSelectedIndex(1);
+                }else if(ddk.equals("Gerbong 2")){
+                    tmpDuduk.setSelectedIndex(2);
+                }else if(ddk.equals("Gerbong 3")){
+                    tmpDuduk.setSelectedIndex(3);
+                }else if(ddk.equals("Gerbong 4")){
+                    tmpDuduk.setSelectedIndex(4);
+                }else if(ddk.equals("Gerbong 5")){
+                    tmpDuduk.setSelectedIndex(5);
+                }else if(ddk.equals("Gerbong 6")){
+                    tmpDuduk.setSelectedIndex(6);
+                }
+                txHarga.setText(tblData.getValueAt(baris, 8).toString());
+        }
     }
 }
